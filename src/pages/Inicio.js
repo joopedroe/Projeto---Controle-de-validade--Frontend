@@ -1,12 +1,27 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
+import api from '../services/api';
+var moment = require('moment');
 //import api from '../services/api';
-import './Inicio.css';
+//import './Inicio.css';
 
 
-export default function Inicio(){
+export default function Inicio({match}){
+ 
+  const [produtos,setProduto]=useState([]);
+  useEffect(()=>{
+    async function carregarProdutos(){
+      const response = await api.get('/lista')
+      setProduto(response.data);
+      console.log(response.data)
+    }
+    carregarProdutos();
+  },[]);
+
     return (
-        <div className="inicio-container">
-     <table className="table-container">       
+  <div className="container">
+  <h2>Produtos próximos ao vencimento</h2>
+  <a href="http://localhost:3000/cadastro/produto" className="btn btn-info" role="button">Cadastrar</a>           
+  <table className="table">
     <thead>
       <tr>
         <th>Data</th>
@@ -16,15 +31,20 @@ export default function Inicio(){
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>07/10/2019</td>
-        <td>789125463201</td>
-        <td>Vinho camo largo 1L</td>
-        <td>15</td>
-      </tr>
+   
+    {produtos.map(produto=>(
+    
+       <tr>
+       <td>{moment(produto.data_validade).format('DD/MM/YYYY')}</td>
+       <td>{produto.codigo}</td>
+       <td>{produto.name}</td>
+       <td>{produto.quantidade}</td>
+     </tr>
+    ))}
+      
     </tbody>
   </table>
+</div>
 
-    </div>
     )
 }

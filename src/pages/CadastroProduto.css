@@ -1,6 +1,5 @@
 .login-container{
     height: 100%;
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,19 +7,19 @@
 
 .login-container form{
     width: 100%;
-    max-width: 500px;
+    max-width: 80%;
     display:flex;
     flex-direction: column;
     
 }
-.login-container form label{
-    margin-top: 20px;
-}
+
 .login-container form input{
-    border: 1px solid #ddd;
+    height: 200px;
     width: 100%;
+    margin-top: 20px;
+    border: 1px solid #ddd;
     border-radius: 4px;
-    height: 48px;
+    height: 100%;
     padding: 0 20px;
     font-size: 16px;
     color:#666;
@@ -33,7 +32,6 @@
 .login-container form button{
     margin-top: 10px;
     border:0;
-    width: 100%;
     border-radius: 4px;
     height:48px;
     font-size: 16px;

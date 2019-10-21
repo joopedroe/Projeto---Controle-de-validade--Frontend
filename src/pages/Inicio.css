@@ -4,14 +4,22 @@
     border-collapse: collapse;
     text-align: center;
     margin: 0 auto;
+    justify-content: center;
+    
 }
 
 .inicio-container table{
     align:center;
+    align-items: center;
+    justify-content: center;
+    background-color: #484848;
 }
 
 .inicio-container table tr{
-    background-color:#CCC;
+    align:center;
+    align-items: center;
+    justify-content: center;
+    background-color:rgb(207, 46, 46);
     font-size: 12px;
     color:#484848;
     padding-left:4px;
