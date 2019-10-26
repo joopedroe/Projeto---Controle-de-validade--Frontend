@@ -20,7 +20,7 @@ export default function Inicio({match}){
     return (
   <div className="container">
   <h2>Produtos próximos ao vencimento</h2>
-  <a href="http://localhost:3000/cadastro/produto" className="btn btn-info" role="button">Cadastrar</a>           
+  <a href="http://192.168.0.20:3000/cadastro/produto" className="btn btn-info" role="button">Cadastrar</a>           
   <table className="table">
     <thead>
       <tr>
