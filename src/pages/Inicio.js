@@ -5,7 +5,7 @@ var moment = require('moment');
 //import './Inicio.css';
 
 
-export default function Inicio({match}){
+export default function Inicio({match,history}){
  
   const [produtos,setProduto]=useState([]);
   useEffect(()=>{
@@ -17,10 +17,25 @@ export default function Inicio({match}){
     carregarProdutos();
   },[]);
 
+  async function handleRetirar(e,id){
+    //e.preventDefault();
+
+    const response = await api.post(`/retirar/produto/${id}`,{
+      "_id": id
+      
+}
+)
+    
+    console.log(response)
+    
+
+    history.go(`/inicio/`);
+}
+
     return (
   <div className="container">
   <h2>Produtos próximos ao vencimento</h2>
-  <a href="http://192.168.0.20:3000/cadastro/produto" className="btn btn-info" role="button">Cadastrar</a>           
+  <a href="https://controle-validade-test.herokuapp.com/cadastro/produto" className="btn btn-info" role="button">Cadastrar</a>           
   <table className="table">
     <thead>
       <tr>
@@ -28,17 +43,22 @@ export default function Inicio({match}){
         <th>Código</th>
         <th>Descrição</th>
         <th>Quantidade</th>
+        <th>Ação</th>
+        
       </tr>
     </thead>
     <tbody>
    
     {produtos.map(produto=>(
     
-       <tr>
+       <tr key={produtos._id}>
        <td>{moment(produto.data_validade).format('DD/MM/YYYY')}</td>
        <td>{produto.codigo}</td>
        <td>{produto.name}</td>
        <td>{produto.quantidade}</td>
+       <td>
+       <button type="button" className="btn btn-link" onClick={e=>handleRetirar(e,produto._id)}>Retirar</button> 
+       </td>
      </tr>
     ))}
       

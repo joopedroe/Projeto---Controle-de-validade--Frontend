@@ -19,6 +19,7 @@ export default function CadastroProduto({history}) {
 
         const response = await api.post('/produto',{
                 "codigoEntrada": codigo,
+                "name":descricao,
                 "data_validadeEntrada":moment(data).format('YYYY-MM-DD')+hora,
                 "quantidade":quantidade,
                 "valor":10,
@@ -112,7 +113,7 @@ export default function CadastroProduto({history}) {
 
           <button type="submit">Cadastrar</button>
           
-          <a href="http://192.168.0.20:3000/inicio" className="btn btn-danger" role="button">Voltar</a> 
+          <a href="https://controle-validade-test.herokuapp.com/inicio" className="btn btn-danger" role="button">Voltar</a> 
           </form>
           
       </div>
