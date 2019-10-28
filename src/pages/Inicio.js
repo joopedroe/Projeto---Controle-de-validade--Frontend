@@ -18,7 +18,7 @@ export default function Inicio({match,history}){
   },[]);
 
   async function handleRetirar(e,id){
-    //e.preventDefault();
+   
 
     const response = await api.post(`/retirar/produto/${id}`,{
       "_id": id
