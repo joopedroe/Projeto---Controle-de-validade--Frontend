@@ -5,7 +5,7 @@ import api from '../services/api';
 var moment = require('moment');
 //import { isContainer } from 'postcss-selector-parser';
 
-export default function CadastroProduto({history}) {
+export default function CadastroProduto({match,history}) {
     const [codigo, setCodigo] = useState('');
     const [data, setData] = useState('');
     const [quantidade, setQuantidade] = useState(undefined);
@@ -17,15 +17,22 @@ export default function CadastroProduto({history}) {
         e.preventDefault();
         var hora=" 08:00:00"
 
-        const response = await api.post('/produto',{
-                "codigoEntrada": codigo,
-                "name":descricao,
-                "data_validadeEntrada":moment(data).format('YYYY-MM-DD')+hora,
-                "quantidade":quantidade,
-                "valor":10,
-                "status":true
-                
+        const dados={
+          "codigoEntrada": codigo,
+          "name":descricao,
+          "data_validadeEntrada":moment(data).format('YYYY-MM-DD')+hora,
+          "quantidade":quantidade,
+          "valor":10,
+          "status":true
+    }
+        const token= localStorage.getItem('token')
+        const response = await api.post('/produto',dados,{
+          headers:{
+          'Content-Type': 'application/json',
+          'authorization': `Bearer ${token}`
           },
+        }
+          
         )
         
         console.log(moment(data).format('YYYY-MM-DD'));

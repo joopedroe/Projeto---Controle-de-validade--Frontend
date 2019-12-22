@@ -5,12 +5,19 @@ var moment = require('moment');
 //import './Inicio.css';
 
 
-export default function Inicio({match,history}){
+export default function Inicio({history}){
  
   const [produtos,setProduto]=useState([]);
   useEffect(()=>{
+    
     async function carregarProdutos(){
-      const response = await api.get('/lista')
+      const token= localStorage.getItem('token')
+      const response = await api.get('/lista',{
+        headers:{
+          'Content-Type': 'application/json',
+        'authorization': `Bearer ${token}`
+        }
+      })
       setProduto(response.data);
       console.log(response.data)
     }
@@ -19,9 +26,12 @@ export default function Inicio({match,history}){
 
   async function handleRetirar(e,id){
    
-
-    const response = await api.post(`/retirar/produto/${id}`,{
-      "_id": id
+    const token= localStorage.getItem('token')
+    const response = await api.post(`/retirar/produto/${id}`,{},{
+      headers:{
+      'Content-Type': 'application/json',
+      'authorization': `Bearer ${token}`
+      },
       
 }
 )

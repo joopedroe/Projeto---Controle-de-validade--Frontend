@@ -10,15 +10,17 @@ export default function Login({history}) {
     async function handleSubmit(e){
         e.preventDefault();
 
-        const response = await api.post('/login',{
+        const response = await api.post('/login', {
                 "username": usuario,
                 "password":senha,
           },
         )
-        console.log(response.data);
-        const { _id }=response.data.user
-        console.log(_id);
-        history.push(`/inicio/${_id}`);
+        
+        const token =response.data.token
+        localStorage.setItem('token',token);
+        console.log(token);
+    
+        history.push('/inicio');
     }
 
   return (
