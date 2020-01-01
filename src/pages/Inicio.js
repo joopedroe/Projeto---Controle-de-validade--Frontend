@@ -8,6 +8,7 @@ var moment = require('moment');
 export default function Inicio({history}){
  
   const [produtos,setProduto]=useState([]);
+  const [dataFilter,setDataFilter]= useState();
   useEffect(()=>{
     
     async function carregarProdutos(){
@@ -19,7 +20,6 @@ export default function Inicio({history}){
         }
       })
       setProduto(response.data);
-      console.log(response.data)
     }
     carregarProdutos();
   },[]);
@@ -41,11 +41,50 @@ export default function Inicio({history}){
 
     history.go(`/inicio/`);
 }
+async function handleFilter(e,data){
+    
+    var hora=" 08:00:00"
+    const dados={
+      "data_validadeEntrada": data+hora
+    }
+    const token= localStorage.getItem('token')
+    console.log(dados)
+    const responseFilter = await api.get('/filter',{
+      headers:{
+      'Content-Type': 'application/json',
+      'authorization': `Bearer ${token}`,
+      "data_validadeEntrada": data+hora
+        },
+      
+      }
+    )
+    setProduto(responseFilter.data);
+    console.log(token)
+    
+
+    //history.go(`/inicio/`);
+}
 
     return (
   <div className="container">
   <h2>Produtos próximos ao vencimento</h2>
-  <a href="https://controle-validade-test.herokuapp.com/cadastro/produto" className="btn btn-info" role="button">Cadastrar</a>           
+  <a href="https://controle-validade-test.herokuapp.com/cadastro/produto" className="btn btn-info" role="button">Cadastrar</a> 
+  <br></br>          
+  <div className="login-container-filter">
+      <form >
+        <label >Listar até:
+          <input 
+          type="date"
+          value={dataFilter}
+          onChange={e=> setDataFilter(e.target.value) }
+        />
+        <button type="button" className="btn btn-secondary" onClick={e=>handleFilter(e,dataFilter)}>Filtar</button>
+         
+          
+          </label>
+          </form>
+      </div>
+ 
   <table className="table">
     <thead>
       <tr>
@@ -74,6 +113,7 @@ export default function Inicio({history}){
       
     </tbody>
   </table>
+  
 </div>
 
     )

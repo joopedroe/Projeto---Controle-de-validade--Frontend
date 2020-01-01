@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import axios from 'axios';
 //import './CadastroProduto.css';
 import api from '../services/api';
+import {logado} from '../services/secao';
 var moment = require('moment');
 //import { isContainer } from 'postcss-selector-parser';
 
@@ -26,6 +27,7 @@ export default function CadastroProduto({match,history}) {
           "status":true
     }
         const token= localStorage.getItem('token')
+        console.log(logado())
         const response = await api.post('/produto',dados,{
           headers:{
           'Content-Type': 'application/json',
@@ -75,6 +77,7 @@ export default function CadastroProduto({match,history}) {
           
           <form onSubmit={handleSubmit}>
           <h1>Cadastrar Produto</h1>
+          
           <br></br>
         
           
@@ -87,7 +90,7 @@ export default function CadastroProduto({match,history}) {
             onChange={e=> setCodigo(e.target.value) }
             />
             
-            <button type="submit" class="btn btn-info">Pesquisar</button>
+            <button type="submit" className="btn btn-info">Pesquisar</button>
             </form>
             </label>
 
@@ -117,6 +120,7 @@ export default function CadastroProduto({match,history}) {
             onChange={e=> setQuantidade(e.target.value) }
           />
           </label>
+          
 
           <button type="submit">Cadastrar</button>
           
@@ -124,6 +128,7 @@ export default function CadastroProduto({match,history}) {
           </form>
           
       </div>
+      
 
     
   );
