@@ -1,6 +1,7 @@
 import React,{useEffect,useState} from 'react';
 import api from '../services/api';
 var moment = require('moment');
+const secoes = ['1','2','3','4','5','6','7','8','9','10']
 //import api from '../services/api';
 //import './Inicio.css';
 
@@ -8,7 +9,8 @@ var moment = require('moment');
 export default function Inicio({history}){
  
   const [produtos,setProduto]=useState([]);
-  const [dataFilter,setDataFilter]= useState();
+  const [dataFilter,setDataFilter]= useState(null);
+  const [secaoFilter,setSecaoFilter]=useState("Todos");
   useEffect(()=>{
     
     async function carregarProdutos(){
@@ -27,44 +29,30 @@ export default function Inicio({history}){
   async function handleRetirar(e,id){
    
     const token= localStorage.getItem('token')
-    const response = await api.post(`/retirar/produto/${id}`,{},{
+    await api.post(`/retirar/produto/${id}`,{},{
       headers:{
       'Content-Type': 'application/json',
       'authorization': `Bearer ${token}`
       },
-      
 }
 )
-    
-    console.log(response)
-    
-
     history.go(`/inicio/`);
 }
-async function handleFilter(e,data){
+async function handleFilter(e,data,secao){
     
-    var hora=" 08:00:00"
-    const dados={
-      "data_validadeEntrada": data+hora
-    }
     const token= localStorage.getItem('token')
-    console.log(dados)
     const responseFilter = await api.get('/filter',{
       headers:{
       'Content-Type': 'application/json',
       'authorization': `Bearer ${token}`,
-      "data_validadeEntrada": data+hora
+      "data_validadeEntrada": data,
+      "secao":secao
         },
       
       }
     )
     setProduto(responseFilter.data);
-    console.log(token)
-    
-
-    //history.go(`/inicio/`);
 }
-
     return (
   <div className="container">
   <h2>Produtos próximos ao vencimento</h2>
@@ -74,14 +62,25 @@ async function handleFilter(e,data){
       <form >
         <label >Listar até:
           <input 
+          id="data"
           type="date"
           value={dataFilter}
+          required name="data"
           onChange={e=> setDataFilter(e.target.value) }
         />
-        <button type="button" className="btn btn-secondary" onClick={e=>handleFilter(e,dataFilter)}>Filtar</button>
-         
+         Seção :   
+        <select id='cbPais' 
+        value={secaoFilter}
+        onChange={e=> setSecaoFilter(e.target.value) }>
+        {secoes.map(secaoI=>(
+        <option >{secaoI}</option>
+          ))}
+</select>
+
+        <button type="button" className="btn btn-secondary" onClick={e=>handleFilter(e,dataFilter,secaoFilter)}>Filtar</button>
+        </label>
           
-          </label>
+         
           </form>
       </div>
  
@@ -91,6 +90,7 @@ async function handleFilter(e,data){
         <th>Data</th>
         <th>Código</th>
         <th>Descrição</th>
+        <th>Seção</th>
         <th>Quantidade</th>
         <th>Ação</th>
         
@@ -104,6 +104,7 @@ async function handleFilter(e,data){
        <td>{moment(produto.data_validade).format('DD/MM/YYYY')}</td>
        <td>{produto.codigo}</td>
        <td>{produto.name}</td>
+       <td>{produto.valor}</td>
        <td>{produto.quantidade}</td>
        <td>
        <button type="button" className="btn btn-link" onClick={e=>handleRetirar(e,produto._id)}>Retirar</button> 

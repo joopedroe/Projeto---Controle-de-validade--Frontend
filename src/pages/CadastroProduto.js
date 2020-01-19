@@ -2,52 +2,42 @@ import React, {useState} from 'react';
 import axios from 'axios';
 //import './CadastroProduto.css';
 import api from '../services/api';
-import {logado} from '../services/secao';
 var moment = require('moment');
 //import { isContainer } from 'postcss-selector-parser';
+const secoes = ['1','2','3','4','5','6','7','8','9','10']
 
 export default function CadastroProduto({match,history}) {
     const [codigo, setCodigo] = useState('');
     const [data, setData] = useState('');
     const [quantidade, setQuantidade] = useState(undefined);
     const [descricao, setDescricao] = useState('');
-    //const [descricao1, setDescricao1] = useState('');
+    const [secao,setSecao]=useState('');
     const [status,setStatus]=useState('');
 
     async function handleSubmit(e){
         e.preventDefault();
         var hora=" 08:00:00"
-
         const dados={
           "codigoEntrada": codigo,
           "name":descricao,
           "data_validadeEntrada":moment(data).format('YYYY-MM-DD')+hora,
           "quantidade":quantidade,
-          "valor":10,
+          "valor":secao,
           "status":true
     }
         const token= localStorage.getItem('token')
-        console.log(logado())
-        const response = await api.post('/produto',dados,{
+        await api.post('/produto',dados,{
           headers:{
           'Content-Type': 'application/json',
           'authorization': `Bearer ${token}`
           },
         }
-          
         )
-        
-        console.log(moment(data).format('YYYY-MM-DD'));
-        console.log(response.data)
-        
-
         history.push(`/inicio/`);
     }
 
     async function handleSubmitCOd(e){
       e.preventDefault();
-      
-      //const res=null
       var config = {
         headers: {'X-Cosmos-Token': '8C4kNbESYhlxbs4J61L53w'}
       };
@@ -59,28 +49,19 @@ export default function CadastroProduto({match,history}) {
           const {description:name}= dados.data;
           setDescricao(name);
         }
-        console.log(response)
-        console.log(status)
         if(response !== undefined){
           verifica(response);
         }else{
           setStatus('Produto não encontrado, acrecente descrição!');
           setDescricao('')
         }
-        
-              
-      
       }
 
   return (
       <div className="login-container">
-          
           <form onSubmit={handleSubmit}>
           <h1>Cadastrar Produto</h1>
-          
           <br></br>
-        
-          
           <label >Código:
           <form onSubmit={handleSubmitCOd}>
           <input 
@@ -88,13 +69,11 @@ export default function CadastroProduto({match,history}) {
             placeholder="Digite o código"
             value={codigo}
             onChange={e=> setCodigo(e.target.value) }
-            />
-            
+          />
             <button type="submit" className="btn btn-info">Pesquisar</button>
-            </form>
-            </label>
-
-            <label >Descrição do Produto:
+          </form>
+          </label>
+          <label >Descrição do Produto:
             <input 
             type="text"
             id="des"
@@ -103,14 +82,22 @@ export default function CadastroProduto({match,history}) {
             required name="des"
             onChange={e=> setDescricao(e.target.value) }
           />
-          
-            </label>
+          </label>
         <label >Data de validade:
           <input 
           type="date"
             value={data}
             onChange={e=> setData(e.target.value) }
           />
+          </label>
+          <label> Seção:
+            <select id='cbPais' 
+              value={secao}
+              onChange={e=> setSecao(e.target.value) }>
+              {secoes.map(secaoI=>(
+                <option >{secaoI}</option>
+              ))}
+              </select>
           </label>
           <label >Quantidade:
           <input 
@@ -120,16 +107,9 @@ export default function CadastroProduto({match,history}) {
             onChange={e=> setQuantidade(e.target.value) }
           />
           </label>
-          
-
           <button type="submit">Cadastrar</button>
-          
           <a href="https://controle-validade-test.herokuapp.com/inicio" className="btn btn-danger" role="button">Voltar</a> 
           </form>
-          
       </div>
-      
-
-    
   );
 }
